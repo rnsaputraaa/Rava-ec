@@ -17,11 +17,11 @@
             <table class="min-w-full bg-white shadow-md">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 text-left border-b-4 border-red-600">Produk</th>
-                        <th class="px-4 py-2 text-left border-b-4 border-red-600">Harga</th>
-                        <th class="px-4 py-2 text-left border-b-4 border-red-600">Jumlah</th>
-                        <th class="px-4 py-2 text-left border-b-4 border-red-600">Total</th>
-                        <th class="px-4 py-2 text-left border-b-4 border-red-600">Delete</th>
+                        <th class="px-4 py-2 text-left">Produk</th>
+                        <th class="px-4 py-2 text-left">Harga</th>
+                        <th class="px-4 py-2 text-left">Jumlah</th>
+                        <th class="px-4 py-2 text-left">Total</th>
+                        <th class="px-4 py-2 text-left">Delete</th>
                     </tr>
                 </thead>
 
