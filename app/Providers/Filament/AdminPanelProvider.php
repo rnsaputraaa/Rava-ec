@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('Razz Resto')
+            ->brandName('Rava Store')
             ->favicon(asset('img/logo.png'))
             ->colors([
                 'primary' => Color::Red,
