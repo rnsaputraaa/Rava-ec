@@ -67,7 +67,7 @@
                     <h3 class="text-lg font-semibold text-gray-800">Contact</h3>
                     <ul class="mt-4 space-y-2">
                         <li class="text-gray-600">Telepon: 0812-4756-4179</li>
-                        <li class="text-gray-600">Email: khafifatulmufidah762@gmail.com</li>
+                        <li class="text-gray-600">Email: ramanurj@gmail.com</li>
                         <li class="text-gray-600">Alamat: Jl.Kh Wachid Hasyim No.13B</li>
                     </ul>
                 </div>

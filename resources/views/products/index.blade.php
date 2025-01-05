@@ -4,7 +4,7 @@
 <div class="py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white p-6 mt-5">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">CATEGORY</h2>
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">KATEGORI</h2>
 
             @if(isset($categories) && $categories->isNotEmpty())
             <div class="flex flex-wrap justify-center items-center gap-6">
@@ -47,24 +47,31 @@
     </div>
 </div>    
 
-<div id="produk" class="py-12">
+<div id="produk" class="py-8 sm:py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white p-6 mb-5 border-b-4 border-red-600">
-            <h2 class="text-2xl font-bold text-center text-gray-800">
-                {{ $selectedCategory->name ?? 'PRODUCT' }}
+        <div class="bg-white p-4 sm:p-6 mb-4 sm:mb-5 border-b-4 border-red-600">
+            <h2 class="text-xl sm:text-2xl font-bold text-center text-gray-800">
+                {{ $selectedCategory->name ?? 'PRODUK' }}
             </h2>
         </div>
 
         @if(isset($products) && $products->isNotEmpty())
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
             @foreach($products as $product)
-            <div class="bg-white shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
-                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-56 object-cover">
-                <div class="p-5">
-                    <h3 class="text-lg font-semibold text-gray-800 truncate">{{ $product->name }}</h3>
-                    <p class="mt-2 text-gray-500">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                    <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})"
-                        class="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-md font-medium hover:bg-red-700 transition duration-300">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+                @if($product->image)
+                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-40 sm:h-56 object-cover">
+                @else
+                    <div class="w-full h-40 sm:h-56 bg-gray-200 flex items-center justify-center">
+                        <span class="text-sm sm:text-base text-gray-400">No Image</span>
+                    </div>
+                @endif
+                
+                <div class="p-3 sm:p-5">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 truncate">{{ $product->name }}</h3>
+                    <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image }}')"
+                        class="mt-2 sm:mt-4 w-full bg-red-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded-md text-sm sm:text-base font-medium hover:bg-red-700 transition duration-300">
                         Tambah ke Keranjang
                     </button>
                 </div>
@@ -73,7 +80,7 @@
         </div>
 
         @else
-        <p class="text-center text-gray-500 italic">Tidak ada produk tersedia.</p>
+        <p class="text-center text-gray-500 text-sm sm:text-base italic">Tidak ada produk tersedia.</p>
         @endif
 
     </div>
@@ -106,13 +113,24 @@
             return;
         }
 
+        const productCard = event.target.closest('.bg-white');
+        const productImage = productCard.querySelector('img');
+        const imagePath = productImage ? productImage.getAttribute('src').replace('/storage/', '') : null;
+
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let productIndex = cart.findIndex(item => item.id === productId);
 
         if (productIndex > -1) {
             cart[productIndex].quantity += 1;
         } else {
-            cart.push({ id: productId, name: productName, price: productPrice, quantity: 1 });
+            cart.push({ 
+                id: productId, 
+                name: productName, 
+                price: productPrice, 
+                image: imagePath,
+                quantity: 1,
+                selected: false
+            });
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));

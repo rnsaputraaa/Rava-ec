@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class ProductResource extends Resource
 {
@@ -22,43 +23,51 @@ class ProductResource extends Resource
     public static function form(Forms\Form $form): Forms\Form
     {
         return $form
-        ->schema([
-            Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-            Forms\Components\TextInput::make('price')
-                ->required()
-                ->numeric(),
-            Forms\Components\FileUpload::make('image')
-                ->directory('products')
-                ->image()
-                ->nullable(),
-            Forms\Components\Select::make('category_id')
-                ->relationship('category', 'name')
-                ->required()
-                ->label('Category'),
-        ]);
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('price')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\FileUpload::make('image')
+                    ->directory('products')
+                    ->image()
+                    ->disk('public')
+                    ->visibility('public')
+                    ->imageResizeMode('contain')
+                    ->imageCropAspectRatio('16:9')
+                    ->imageResizeTargetWidth('1920')
+                    ->imageResizeTargetHeight('1080')
+                    ->nullable(),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required()
+                    ->label('Category'),
+            ]);
     }
 
     public static function table(Tables\Table $table): Tables\Table
     {
         return $table
-        ->columns([
-            Tables\Columns\TextColumn::make('name')
-                ->sortable()
-                ->searchable(),
-            Tables\Columns\TextColumn::make('price')
-                ->sortable()
-                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
-            Tables\Columns\ImageColumn::make('image')
-                ->label('Image'),
-            Tables\Columns\TextColumn::make('category.name')
-                ->label('Category')
-                ->sortable(),
-        ])
-        ->filters([]);
+            ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('price')
+                    ->sortable()
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->square()
+                    ->label('Image'),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->sortable(),
+            ])
+            ->filters([]);
     }
-
 
     public static function getRelations(): array
     {
