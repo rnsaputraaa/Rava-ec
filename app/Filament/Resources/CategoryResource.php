@@ -27,6 +27,16 @@ class CategoryResource extends Resource
                     ->label('Category Name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Repeater::make('subcategories')
+                    ->relationship('subcategories')
+                    ->label('Subcategories')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Subcategory Name')
+                            ->required()
+                            ->maxLength(255),   
+                    ])
+                    ->createItemButtonLabel('Add Subcategory'),
             ]);
     }
 
@@ -41,6 +51,10 @@ class CategoryResource extends Resource
                     ->label('Category Name')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('subcategories_count')
+                    ->label('Total Subcategories')
+                    ->counts('subcategories')
+                    ->color('success'),
                 BadgeColumn::make('products_count')
                     ->label('Total Products')
                     ->counts('products')
