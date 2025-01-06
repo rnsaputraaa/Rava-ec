@@ -60,7 +60,7 @@
             @foreach($products as $product)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
                 @if($product->image)
-                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-40 sm:h-56 object-cover">
+                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-40 sm:h-56 object-cover product-image">
                 @else
                     <div class="w-full h-40 sm:h-56 bg-gray-200 flex items-center justify-center">
                         <span class="text-sm sm:text-base text-gray-400">No Image</span>
@@ -70,7 +70,9 @@
                 <div class="p-3 sm:p-5">
                     <h3 class="text-base sm:text-lg font-semibold text-gray-800 truncate">{{ $product->name }}</h3>
                     <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                    <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image }}')"
+                    <button 
+                        type="button"
+                        onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image ? Storage::url($product->image) : '' }}')"
                         class="mt-2 sm:mt-4 w-full bg-red-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded-md text-sm sm:text-base font-medium hover:bg-red-700 transition duration-300">
                         Tambah ke Keranjang
                     </button>
@@ -82,7 +84,6 @@
         @else
         <p class="text-center text-gray-500 text-sm sm:text-base italic">Tidak ada produk tersedia.</p>
         @endif
-
     </div>
 </div>
 
@@ -100,7 +101,7 @@
         }
     });
 
-    function addToCart(productId, productName, productPrice) {
+    function addToCart(productId, productName, productPrice, imageUrl) {
         if (!isLoggedIn) {
             Swal.fire({
                 icon: 'warning',
@@ -113,28 +114,23 @@
             return;
         }
 
-        const productCard = event.target.closest('.bg-white');
-        const productImage = productCard.querySelector('img');
-        const imagePath = productImage ? productImage.getAttribute('src').replace('/storage/', '') : null;
-
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let productIndex = cart.findIndex(item => item.id === productId);
 
         if (productIndex > -1) {
             cart[productIndex].quantity += 1;
         } else {
-            cart.push({ 
-                id: productId, 
-                name: productName, 
-                price: productPrice, 
-                image: imagePath,
+            cart.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                image: imageUrl,
                 quantity: 1,
                 selected: false
             });
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-
         Swal.fire({
             icon: 'success',
             title: 'Produk Ditambahkan',

@@ -52,24 +52,21 @@
                 }
 
                 cartItems.innerHTML += `
-                    <div class="p-4">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center space-x-4">
                             <input type="checkbox" 
-                                class="cart-checkbox w-4 h-4 text-red-600 rounded border-gray-300" 
+                                class="cart-checkbox w-4 h-4 text-red-600 rounded border-gray-300"
                                 ${item.selected ? 'checked' : ''} 
                                 onchange="toggleItemSelection(${index}, this.checked)">
-                            <div class="flex-shrink-0 w-24 h-24">
-                                ${item.image ? 
-                                    `<img src="/storage/${item.image}" alt="${item.name}" class="w-full h-full object-cover rounded-md">` :
-                                    `<div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-md">
-                                        <span class="text-gray-400">No Image</span>
-                                    </div>`
-                                }
+                            <div class="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24">
+                                <img src="${item.image}" alt="${item.name}" 
+                                    class="w-full h-full object-cover rounded-md"
+                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-gray-200 flex items-center justify-center rounded-md\'><span class=\'text-gray-400\'>No Image</span></div>'">
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-medium text-gray-900">${item.name}</h3>
-                                <p class="mt-1 text-sm text-gray-500">Rp ${item.price.toLocaleString('id-ID')}</p>
-                                <div class="mt-2 flex items-center space-x-4">
+                                <h3 class="text-base sm:text-lg font-medium text-gray-900">${item.name}</h3>
+                                <p class="mt-1 text-sm sm:text-base text-gray-500">Rp ${item.price.toLocaleString('id-ID')}</p>
+                                <div class="mt-2 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                     <div class="flex items-center border rounded-md">
                                         <button class="px-3 py-1 border-r hover:bg-gray-100" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
                                         <input type="number" value="${item.quantity}" min="1" 
@@ -188,5 +185,6 @@
 
         window.onload = loadCart;
     </script>
+
 </body>
 </html>
