@@ -74,7 +74,7 @@
                         type="button"
                         onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image ? Storage::url($product->image) : '' }}')"
                         class="mt-2 sm:mt-4 w-full bg-red-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded-md text-sm sm:text-base font-medium hover:bg-red-700 transition duration-300">
-                        Tambah ke Keranjang
+                        Tambah Keranjang
                     </button>
                 </div>
             </div>
