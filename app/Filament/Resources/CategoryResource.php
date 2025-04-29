@@ -41,7 +41,7 @@ class CategoryResource extends Resource
                     ->label('Category Name')
                     ->sortable()
                     ->searchable(),
-                BadgeColumn::make('products_count')
+                TextColumn::make('products_count')
                     ->label('Total Products')
                     ->counts('products')
                     ->color('success'),
